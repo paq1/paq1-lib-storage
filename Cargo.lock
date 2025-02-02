@@ -1043,8 +1043,10 @@ source = "git+https://github.com/paq1/paq1-lib-error-handler.git?branch=master#c
 name = "paq1-lib-storage"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "mongodb",
  "paq1-lib-error-handler",
+ "uuid",
 ]
 
 [[package]]
@@ -1758,6 +1760,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b3758f5e68192bb96cc8f9b7e2c2cfdabb435499a28499a42f8f984092adad4b"
 dependencies = [
  "getrandom",
+ "rand",
  "serde",
 ]
 
