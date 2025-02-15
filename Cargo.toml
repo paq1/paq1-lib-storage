@@ -1,13 +1,3 @@
-[package]
-name = "paq1-lib-storage"
-version = "0.1.0"
-edition = "2021"
-description = "give repository and dao abstraction and implementation mongodb"
-license = "MIT OR Apache-2.0"
-authors = ["paq1"]
-
-[dependencies]
-paq1-lib-error-handler = { git = "https://github.com/paq1/paq1-lib-error-handler.git", branch = "master", features = ["combine"] }
-mongodb = { version = "3.2.0", features = ["sync"] }
-uuid = { version = "1.9.1", features = ["v4", "fast-rng"] }
-async-trait = { version = "0.1.80" }
+[workspace]
+resolver = "2"
+members = ["core", "infra"]

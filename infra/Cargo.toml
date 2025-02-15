@@ -1,0 +1,10 @@
+[package]
+name = "infra"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+mongodb = { version = "3.2.0", features = ["sync"] }
+# uuid = { version = "1.9.1", features = ["v4", "fast-rng"] }
+
+core = { path = "../core" }
