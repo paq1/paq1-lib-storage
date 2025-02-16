@@ -1,11 +1,18 @@
-use core::prelude::*;
+use core_lib::prelude::*;
 use mongodb::bson::{doc, Document};
 
 pub struct DocumentWrapper {
+    pub filter: Document,
     #[allow(dead_code)]
-    filter: Document,
+    pub sorter: Document,
+}
+
+impl DocumentWrapper {
+
     #[allow(dead_code)]
-    sorter: Document,
+    pub fn get_filter(&self) -> &Document {
+        &self.filter
+    }
 }
 
 impl From<Query> for DocumentWrapper {
