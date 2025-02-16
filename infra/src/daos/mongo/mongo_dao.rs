@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use core_lib::daos::DAO;
-use log::{error, info};
+use log::error;
 use futures::TryStreamExt;
 use mongodb::Collection;
 use paq1_lib_error_handler::prelude::{ErrorWithCodeBuilder, ResultErr};
@@ -8,7 +8,6 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 
 use mongodb::bson::doc;
-use paq1_lib_error_handler::prelude::Error::ErrorWithCode;
 use core_lib::query::Query;
 use crate::query::DocumentWrapper;
 
@@ -53,12 +52,6 @@ where
     }
 
     async fn fetch_all(&self, query: &Query) -> ResultErr<Vec<DBO>> {
-        // if !self.is_connected().await {
-        //     error!("la connexion au client mongo est perdu");
-        // } else {
-        //     info!("la connexion est ok");
-        // }
-
         self.find_all(query).await
             .map_err(|err| {
                 ErrorWithCodeBuilder::new("00MONFA", 500, err.to_string().as_str())
@@ -67,10 +60,25 @@ where
     }
 
     async fn insert(&self, entity: &DBO, entity_id: &String) -> ResultErr<String> {
-        todo!()
+        self.collection
+            .insert_one(entity)
+            .await
+            .map_err(|err| {
+                ErrorWithCodeBuilder::new("00MONIN", 500, err.to_string().as_str())
+                    .build()
+            })
+            .map(|_| entity_id.clone())
     }
 
     async fn update(&self, id: &String, entity: &DBO) -> ResultErr<String> {
-        todo!()
+        let filter = doc! { "id": id };
+        self.collection
+            .replace_one(filter, entity)
+            .await
+            .map(|_| id.clone())
+            .map_err(|err| {
+                ErrorWithCodeBuilder::new("00MONUP", 500, err.to_string().as_str())
+                    .build()
+            })
     }
 }

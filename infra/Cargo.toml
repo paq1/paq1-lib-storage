@@ -5,12 +5,12 @@ edition = "2021"
 
 [dependencies]
 paq1-lib-error-handler = { workspace = true }
+async-trait = { workspace = true }
 mongodb = { version = "3.2.0", features = ["sync"] }
 log = "0.4.22"
 futures = "0.3.30"
-# env_logger = "0.11.5"
+env_logger = "0.11.5"
 serde = { version = "1.0.203", features = ["derive"] }
-async-trait = { workspace = true }
 # uuid = { version = "1.9.1", features = ["v4", "fast-rng"] }
 
 core_lib = { path = "../core" }
