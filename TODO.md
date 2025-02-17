@@ -1,0 +1,8 @@
+- [ ] mettre en place des tests unitaire
+- [ ] mettre en place des tests d'integration
+- [ ] (query) implémenter les expression : lessthan heigher than
+- [ ] implementer les expressions pour les type i64 (voir mettre en place un new type Number(i64))
+- [ ] implémenter les expressions pour les dates (NaiveDate, Date ... etc)
+- [ ] mettre en place une implementation de DAO pour redis
+- [ ] mettre en place une abstraction pour le caching redis
+- [ ] mettre des config de compilation #[cfg(feature="mongo")] #[cfg(feature="redis")] #[cfg(feature="cache")] ... etc
