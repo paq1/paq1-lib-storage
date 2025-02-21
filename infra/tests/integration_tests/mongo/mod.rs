@@ -25,4 +25,9 @@ pub async fn should_insert_read_update_delete_in_mongo_test() {
 
     assert_eq!(personnage_dbo.name, "whatever");
     assert_eq!(personnage_dbo.age, 10);
+
+    dao.delete(&"1".to_string()).await.expect("delete failed ... ");
+
+    let maybe_personnage_dbo = dao.fetch_one(&id).await.expect("impossible de recuperer la donnée ... ");
+    assert!(maybe_personnage_dbo.is_none());
 }

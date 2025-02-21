@@ -84,4 +84,15 @@ where
                     .build()
             })
     }
+
+    async fn delete(&self, id: &String) -> ResultErr<()> {
+        self.collection
+            .delete_one(doc! { "id": id })
+            .await
+            .map_err(|err| {
+                ErrorWithCodeBuilder::new("00MONDL", 500, err.to_string().as_str())
+                    .build()
+            })
+            .map(|_| ())
+    }
 }

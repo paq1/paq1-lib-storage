@@ -11,4 +11,6 @@ pub trait DAO<DBO, ID>: Send + Sync {
     async fn insert(&self, entity: &DBO) -> ResultErr<ID>;
     async fn update(&self, entity: &DBO) -> ResultErr<ID>;
 
+    async fn delete(&self, id: &String) -> ResultErr<()>;
+
 }
