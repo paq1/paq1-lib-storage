@@ -6,6 +6,8 @@ edition = "2021"
 [dependencies]
 paq1-lib-error-handler = { workspace = true }
 async-trait = { workspace = true }
+config = { workspace = true }
+dotenv = { workspace = true }
 mongodb = { version = "3.2.0", features = ["sync"] }
 log = "0.4.22"
 futures = "0.3.30"

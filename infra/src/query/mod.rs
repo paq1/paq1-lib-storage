@@ -1,13 +1,13 @@
 use core_lib::prelude::*;
 use mongodb::bson::{doc, Document};
 
-pub struct DocumentWrapper {
+pub struct DocumentQuery {
     pub filter: Document,
     #[allow(dead_code)]
     pub sorter: Document,
 }
 
-impl DocumentWrapper {
+impl DocumentQuery {
 
     #[allow(dead_code)]
     pub fn get_filter(&self) -> &Document {
@@ -15,12 +15,12 @@ impl DocumentWrapper {
     }
 }
 
-impl From<Query> for DocumentWrapper {
+impl From<Query> for DocumentQuery {
     fn from(value: Query) -> Self {
         let filter = query_to_filter(&value);
         let sorter = query_to_sorter(&value);
 
-        DocumentWrapper {
+        DocumentQuery {
             filter,
             sorter
         }

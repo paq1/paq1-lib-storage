@@ -1,6 +1,6 @@
 use mongodb::bson::doc;
 use core_lib::query::*;
-use infra::prelude::DocumentWrapper;
+use infra::prelude::DocumentQuery;
 
 #[test]
 pub fn should_map_query_filter_empty_to_empty_document_test() {
@@ -11,7 +11,7 @@ pub fn should_map_query_filter_empty_to_empty_document_test() {
         pager: Pager::default()
     };
 
-    let document_wrapper: DocumentWrapper = query.into();
+    let document_wrapper: DocumentQuery = query.into();
 
     assert_eq!(document_wrapper.filter, doc! {});
 }
@@ -31,7 +31,7 @@ pub fn should_map_query_filter_equal_to_filter_equal_document_test() {
         pager: Pager::default()
     };
 
-    let document_wrapper: DocumentWrapper = query.into();
+    let document_wrapper: DocumentQuery = query.into();
 
     assert_eq!(document_wrapper.filter, doc! {
         "field_test": "value test"

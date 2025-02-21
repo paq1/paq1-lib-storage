@@ -9,7 +9,7 @@ use serde::Serialize;
 
 use mongodb::bson::doc;
 use core_lib::query::Query;
-use crate::query::DocumentWrapper;
+use crate::query::DocumentQuery;
 
 pub struct MongoDao<DBO>
 where
@@ -23,7 +23,7 @@ where
     DBO: DeserializeOwned + Send + Sync,
 {
     async fn find_all(&self, query: &Query) -> Result<Vec<DBO>, mongodb::error::Error> {
-        let document_wrapper: DocumentWrapper = query.clone().into();
+        let document_wrapper: DocumentQuery = query.clone().into();
         self.collection
             .find(document_wrapper.filter)
             .await?
