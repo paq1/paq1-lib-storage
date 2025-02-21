@@ -4,15 +4,15 @@ use std::env;
 use std::sync::OnceLock;
 
 #[derive(Debug, Deserialize)]
-struct Database {
-    url: String,
+pub struct Database {
+    pub url: String,
 }
 
 #[derive(Debug, Deserialize)]
 #[allow(unused)]
 pub struct Settings {
-    env: String,
-    database: Database
+    pub env: String,
+    pub database: Database
 }
 
 impl Settings {
