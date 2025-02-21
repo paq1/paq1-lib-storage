@@ -3,6 +3,7 @@ resolver = "2"
 members = ["core", "infra"]
 
 [workspace.dependencies]
+tokio = { version = "1.43.0", features = ["full"] }
 async-trait = { version = "0.1.80" }
 config = { version = "0.15.8" }
 dotenv = { version = "0.15.0" }

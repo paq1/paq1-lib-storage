@@ -9,18 +9,19 @@ use serde::Serialize;
 
 use mongodb::bson::doc;
 use core_lib::query::Query;
+use crate::daos::mongo::identifier::HasIdentifier;
 use crate::query::DocumentQuery;
 
 pub struct MongoDao<DBO>
 where
-    DBO: Send + Sync,
+    DBO: Send + Sync + HasIdentifier,
 {
     pub collection: Collection<DBO>
 }
 
 impl<DBO> MongoDao<DBO>
 where
-    DBO: DeserializeOwned + Send + Sync,
+    DBO: DeserializeOwned + Send + Sync + HasIdentifier,
 {
     async fn find_all(&self, query: &Query) -> Result<Vec<DBO>, mongodb::error::Error> {
         let document_wrapper: DocumentQuery = query.clone().into();
@@ -39,7 +40,7 @@ where
 #[async_trait]
 impl<DBO> DAO<DBO, String> for MongoDao<DBO>
 where
-    DBO: Serialize + DeserializeOwned + Send + Sync,
+    DBO: Serialize + DeserializeOwned + Send + Sync + HasIdentifier,
 {
     async fn fetch_one(&self, id: &String) -> ResultErr<Option<DBO>> {
         let filter = doc! {"id": id};
@@ -59,7 +60,8 @@ where
             })
     }
 
-    async fn insert(&self, entity: &DBO, entity_id: &String) -> ResultErr<String> {
+    async fn insert(&self, entity: &DBO) -> ResultErr<String> {
+        let id = entity.identifier();
         self.collection
             .insert_one(entity)
             .await
@@ -67,10 +69,11 @@ where
                 ErrorWithCodeBuilder::new("00MONIN", 500, err.to_string().as_str())
                     .build()
             })
-            .map(|_| entity_id.clone())
+            .map(|_| id.clone())
     }
 
-    async fn update(&self, id: &String, entity: &DBO) -> ResultErr<String> {
+    async fn update(&self, entity: &DBO) -> ResultErr<String> {
+        let id = entity.identifier();
         let filter = doc! { "id": id };
         self.collection
             .replace_one(filter, entity)
