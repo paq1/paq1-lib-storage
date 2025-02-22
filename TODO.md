@@ -1,6 +1,11 @@
 - [x] mettre en place des tests unitaire
 - [x] mettre en place des tests d'integration
-- [ ] mettre en place une config pour les tests d'integration
+- [ ] pousser les test
+  - [ ] tester les erreurs de connection à mongo
+  - [ ] tester le find_all
+  - [ ] tester le fetch_all
+  - [ ] tester les erreurs dao
+- [x] mettre en place une config pour les tests d'integration
 - [ ] (query) implémenter les expression : lessthan heigher than
 - [ ] implementer les expressions pour les type i64 (voir mettre en place un new type Number(i64))
 - [ ] implémenter les expressions pour les dates (NaiveDate, Date ... etc)
