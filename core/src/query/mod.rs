@@ -15,30 +15,30 @@ impl Query {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Filter {
     Expression(Expression),
     None
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     ExpressionString(ExpressionT<String>),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ExpressionT<T> {
     pub field_name: String,
     pub operation: Operation,
     pub head: T,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Operation {
     EqualsTo,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Pager {
     pub page_number: usize,
     pub page_size: usize,
