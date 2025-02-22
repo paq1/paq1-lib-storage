@@ -14,8 +14,8 @@ pub(super) async fn set_up_test_personnage_dao() -> ResultErr<Arc<dyn DAO<Person
     let settings = Settings::unsafe_get_lazy();
 
     let mongo_database = DatabaseMongo::new(settings.database.url.as_str(), "lib_storage_it")
-        .await
-        .unwrap();
+        .await?;
+
     let collection = mongo_database
         .underlying
         .collection("lib_storage_it_insertion");
