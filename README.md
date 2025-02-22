@@ -6,6 +6,7 @@
  cargo test --test run_unit_tests
 ```
 ## run integration test
+il est necessaire d'avoir une mongo local qui tourne, conformément aux config des TI
 ```cmd
  cargo test --test run_integration_tests
 ```
