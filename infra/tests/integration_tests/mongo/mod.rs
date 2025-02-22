@@ -1,27 +1,14 @@
 mod dbo_model;
+mod setup;
 
 use crate::integration_tests::mongo::dbo_model::PersonnageDBO;
-use crate::integration_tests::settings::Settings;
+use crate::integration_tests::mongo::setup::{before_each, set_up_test_personnage_dao};
 use core_lib::daos::DAO;
-use infra::daos::mongo::database::DatabaseMongo;
-use infra::daos::mongo::mongo_dao::MongoDao;
 use std::sync::Arc;
-
-async fn before_each<DBO>(dao: Arc<dyn DAO<DBO, String>>) {
-    dao.delete_all().await.unwrap();
-}
 
 #[tokio::test]
 pub async fn should_insert_read_update_delete_in_mongo_test() {
-    let settings = Settings::unsafe_get_lazy();
-
-    let mongo_database = DatabaseMongo::new(settings.database.url.as_str(), "lib_storage_it")
-        .await
-        .unwrap();
-    let collection = mongo_database
-        .underlying
-        .collection("lib_storage_it_insertion");
-    let dao: Arc<dyn DAO<PersonnageDBO, String>> = Arc::new(MongoDao { collection });
+    let dao: Arc<dyn DAO<PersonnageDBO, String>> = set_up_test_personnage_dao().await.unwrap();
 
     before_each(dao.clone()).await;
 
@@ -43,6 +30,22 @@ pub async fn should_insert_read_update_delete_in_mongo_test() {
 
     assert_eq!(personnage_dbo.name, "whatever");
     assert_eq!(personnage_dbo.age, 10);
+
+    let updated_personnage: PersonnageDBO = PersonnageDBO {
+        name: "new name test".to_string(),
+        ..personnage_dbo
+    };
+
+    dao.update(&updated_personnage).await.expect("update failed ... ");
+
+    let updated_personnage_dbo = dao
+        .fetch_one(&id)
+        .await
+        .expect("impossible de recuperer la donnée ... ")
+        .unwrap();
+
+    assert_eq!(updated_personnage_dbo.name, "new name test");
+    assert_eq!(updated_personnage_dbo.age, 10);
 
     dao.delete(&"1".to_string())
         .await
