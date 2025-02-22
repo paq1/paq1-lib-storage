@@ -1,9 +1,7 @@
 use async_trait::async_trait;
 use core_lib::daos::DAO;
 use futures::TryStreamExt;
-use log::error;
 use mongodb::Collection;
-use paq1_lib_error_handler::prelude::{ErrorWithCodeBuilder, ResultErr};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 
@@ -30,50 +28,35 @@ where
             .await?
             .try_collect::<Vec<DBO>>()
             .await
-            .map_err(|error| {
-                error!("mongodb error: {error:?}");
-                error
-            })
     }
 }
 
 #[async_trait]
-impl<DBO> DAO<DBO, String> for MongoDao<DBO>
+impl<DBO> DAO<DBO, String, mongodb::error::Error> for MongoDao<DBO>
 where
     DBO: Serialize + DeserializeOwned + Send + Sync + HasIdentifier,
 {
-    async fn fetch_one(&self, id: &String) -> ResultErr<Option<DBO>> {
+    async fn fetch_one(&self, id: &String) -> Result<Option<DBO>, mongodb::error::Error> {
         let key = DBO::identifier_key();
         let filter = doc! {key: id};
         self.collection
             .find_one(filter)
             .await
-            .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONFO", 500, err.to_string().as_str()).build()
-            })
     }
 
-    async fn fetch_all(&self, query: &Query) -> ResultErr<Vec<DBO>> {
+    async fn fetch_all(&self, query: &Query) -> Result<Vec<DBO>, mongodb::error::Error> {
         self.find_all(query).await
-            .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONFA", 500, err.to_string().as_str())
-                    .build()
-            })
     }
 
-    async fn insert(&self, entity: &DBO) -> ResultErr<String> {
+    async fn insert(&self, entity: &DBO) -> Result<String, mongodb::error::Error> {
         let id = entity.identifier_value();
         self.collection
             .insert_one(entity)
             .await
-            .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONIN", 500, err.to_string().as_str())
-                    .build()
-            })
             .map(|_| id.clone())
     }
 
-    async fn update(&self, entity: &DBO) -> ResultErr<String> {
+    async fn update(&self, entity: &DBO) -> Result<String, mongodb::error::Error> {
         let id = entity.identifier_value();
         let key = DBO::identifier_key();
         let filter = doc! { key: id };
@@ -81,35 +64,19 @@ where
             .replace_one(filter, entity)
             .await
             .map(|_| id.clone())
-            .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONUP", 500, err.to_string().as_str())
-                    .build()
-            })
     }
 
-    async fn delete(&self, id: &String) -> ResultErr<()> {
+    async fn delete(&self, id: &String) -> Result<(), mongodb::error::Error> {
         let key = DBO::identifier_key();
         self.collection
             .delete_one(doc! { key: id })
             .await
-            .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONDL", 500, err.to_string().as_str())
-                    .build()
-            })
             .map(|_| ())
     }
 
-    async fn delete_all(&self) -> ResultErr<()> {
+    async fn delete_all(&self) -> Result<(), mongodb::error::Error> {
         self.collection
             .delete_many(doc! {})
             .await.map(|_| ())
-            .map_err(|err| {
-                ErrorWithCodeBuilder::new(
-                    "00MDELM",
-                    500,
-                    err.to_string().as_str()
-                )
-                    .build()
-            })
     }
 }

@@ -6,3 +6,5 @@ edition = "2021"
 [dependencies]
 paq1-lib-error-handler = { workspace = true }
 async-trait = { workspace = true }
+tokio = { workspace = true }
+serde = { version = "1.0.218", features = ["derive"] }

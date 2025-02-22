@@ -1,21 +1,12 @@
 use mongodb::{Client, Database};
-use paq1_lib_error_handler::prelude::*;
 
 pub struct DatabaseMongo {
     pub underlying: Database,
 }
 
 impl DatabaseMongo {
-    pub async fn new(uri: &str, dbname: &str) -> ResultErr<Self> {
-        let client = Client::with_uri_str(uri).await.map_err(|err| {
-            ErrorWithCodeBuilder::new("00MGCONCLI", 500, "Erreur lors de la connection au client mongo.")
-                .with_problems(vec![Problem {
-                    title: format!("mongo error : {err}"),
-                    description: None,
-                    warn_message: None,
-                }])
-                .build()
-        })?;
+    pub async fn new(uri: &str, dbname: &str) -> Result<Self, mongodb::error::Error> {
+        let client = Client::with_uri_str(uri).await?;
 
         Ok(Self {
             underlying: client.database(dbname),

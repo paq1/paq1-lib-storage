@@ -1,17 +1,16 @@
 use crate::query::Query;
 use async_trait::async_trait;
-use paq1_lib_error_handler::prelude::ResultErr;
 
 #[async_trait]
-pub trait DAO<DBO, ID>: Send + Sync {
+pub trait DAO<DBO, ID, ERR>: Send + Sync {
 
-    async fn fetch_one(&self, id: &ID) -> ResultErr<Option<DBO>>;
-    async fn fetch_all(&self, query: &Query) -> ResultErr<Vec<DBO>>;
+    async fn fetch_one(&self, id: &ID) -> Result<Option<DBO>, ERR>;
+    async fn fetch_all(&self, query: &Query) -> Result<Vec<DBO>, ERR>;
 
-    async fn insert(&self, entity: &DBO) -> ResultErr<ID>;
-    async fn update(&self, entity: &DBO) -> ResultErr<ID>;
+    async fn insert(&self, entity: &DBO) -> Result<ID, ERR>;
+    async fn update(&self, entity: &DBO) -> Result<ID, ERR>;
 
-    async fn delete(&self, id: &String) -> ResultErr<()>;
-    async fn delete_all(&self) -> ResultErr<()>;
+    async fn delete(&self, id: &String) -> Result<(), ERR>;
+    async fn delete_all(&self) -> Result<(), ERR>;
 
 }

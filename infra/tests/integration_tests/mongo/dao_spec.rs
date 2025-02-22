@@ -1,14 +1,14 @@
-use std::sync::Arc;
-use core_lib::daos::DAO;
 use crate::integration_tests::mongo::dbo_model::PersonnageDBO;
 use crate::integration_tests::mongo::setup::{before_each, set_up_test_personnage_dao};
+use core_lib::prelude::Filter;
+use core_lib::query::{Pager, Query};
 
 #[tokio::test]
 pub async fn should_insert_read_update_delete_in_mongo_test() {
 
     let collection_name = "test_collection_read_update_delete";
 
-    let dao: Arc<dyn DAO<PersonnageDBO, String>> = set_up_test_personnage_dao(collection_name).await.unwrap();
+    let dao = set_up_test_personnage_dao(collection_name).await.unwrap();
 
     before_each(dao.clone()).await;
 
@@ -56,4 +56,44 @@ pub async fn should_insert_read_update_delete_in_mongo_test() {
         .await
         .expect("impossible de recuperer la donnée ... ");
     assert!(maybe_personnage_dbo.is_none());
+}
+
+#[tokio::test]
+pub async fn should_fetch_all_in_mongo_test() {
+
+    let collection_name = "test_collection_fetch_all";
+
+    let dao = set_up_test_personnage_dao(collection_name).await.unwrap();
+
+    before_each(dao.clone()).await;
+
+    let personnage1 = PersonnageDBO {
+        id: "1".to_string(),
+        name: "whatever".to_string(),
+        age: 10,
+    };
+
+    let personnage2 = PersonnageDBO {
+        id: "2".to_string(),
+        name: "whatever".to_string(),
+        age: 10,
+    };
+
+    let _ = dao.insert(&personnage1).await.expect("insert failed ... ");
+    let _ = dao.insert(&personnage2).await.expect("insert failed ... ");
+
+    let personnages: Vec<PersonnageDBO> = dao
+        .fetch_all(&Query {pager: Pager::default(), filter: Filter::None})
+        .await.unwrap();
+
+    assert_eq!(personnages.len(), 2);
+    assert_eq!(personnages, vec![personnage1, personnage2]);
+
+    let _ = dao.delete_all().await.unwrap();
+
+    let no_personnages: Vec<PersonnageDBO> = dao
+        .fetch_all(&Query {pager: Pager::default(), filter: Filter::None})
+        .await.unwrap();
+
+    assert_eq!(no_personnages.len(), 0);
 }

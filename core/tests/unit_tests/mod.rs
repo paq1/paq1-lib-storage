@@ -1,5 +1,7 @@
 use core_lib::prelude::{Filter, Pager, Query};
 
+pub mod repositories;
+
 #[test]
 fn should_get_filer_and_pager() {
     let query = Query {
