@@ -1,6 +1,6 @@
-use mongodb::bson::doc;
 use core_lib::query::*;
 use infra::prelude::DocumentQuery;
+use mongodb::bson::doc;
 
 #[test]
 pub fn should_map_query_filter_empty_to_empty_document_test() {

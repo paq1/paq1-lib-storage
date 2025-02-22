@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use infra::daos::mongo::identifier::HasIdentifier;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub(crate) struct PersonnageDBO {
