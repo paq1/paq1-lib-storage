@@ -5,7 +5,10 @@ use crate::integration_tests::mongo::setup::{before_each, set_up_test_personnage
 
 #[tokio::test]
 pub async fn should_insert_read_update_delete_in_mongo_test() {
-    let dao: Arc<dyn DAO<PersonnageDBO, String>> = set_up_test_personnage_dao().await.unwrap();
+
+    let collection_name = "test_collection_read_update_delete";
+
+    let dao: Arc<dyn DAO<PersonnageDBO, String>> = set_up_test_personnage_dao(collection_name).await.unwrap();
 
     before_each(dao.clone()).await;
 
