@@ -9,7 +9,11 @@ pub(crate) struct PersonnageDBO {
 }
 
 impl HasIdentifier for PersonnageDBO {
-    fn identifier(&self) -> &String {
+    fn identifier_value(&self) -> &String {
         &self.id
+    }
+
+    fn identifier_key() -> String {
+        String::from("id")
     }
 }

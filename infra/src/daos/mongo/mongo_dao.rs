@@ -43,7 +43,8 @@ where
     DBO: Serialize + DeserializeOwned + Send + Sync + HasIdentifier,
 {
     async fn fetch_one(&self, id: &String) -> ResultErr<Option<DBO>> {
-        let filter = doc! {"id": id};
+        let key = DBO::identifier_key();
+        let filter = doc! {key: id};
         self.collection
             .find_one(filter)
             .await
@@ -61,7 +62,7 @@ where
     }
 
     async fn insert(&self, entity: &DBO) -> ResultErr<String> {
-        let id = entity.identifier();
+        let id = entity.identifier_value();
         self.collection
             .insert_one(entity)
             .await
@@ -73,8 +74,9 @@ where
     }
 
     async fn update(&self, entity: &DBO) -> ResultErr<String> {
-        let id = entity.identifier();
-        let filter = doc! { "id": id };
+        let id = entity.identifier_value();
+        let key = DBO::identifier_key();
+        let filter = doc! { key: id };
         self.collection
             .replace_one(filter, entity)
             .await
@@ -86,13 +88,28 @@ where
     }
 
     async fn delete(&self, id: &String) -> ResultErr<()> {
+        let key = DBO::identifier_key();
         self.collection
-            .delete_one(doc! { "id": id })
+            .delete_one(doc! { key: id })
             .await
             .map_err(|err| {
                 ErrorWithCodeBuilder::new("00MONDL", 500, err.to_string().as_str())
                     .build()
             })
             .map(|_| ())
+    }
+
+    async fn delete_all(&self) -> ResultErr<()> {
+        self.collection
+            .delete_many(doc! {})
+            .await.map(|_| ())
+            .map_err(|err| {
+                ErrorWithCodeBuilder::new(
+                    "00MDELM",
+                    500,
+                    err.to_string().as_str()
+                )
+                    .build()
+            })
     }
 }

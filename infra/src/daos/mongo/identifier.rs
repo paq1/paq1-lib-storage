@@ -1,5 +1,4 @@
 pub trait HasIdentifier {
-    fn identifier(&self) -> &String;
-
-    // TODO : add identifier path ?
+    fn identifier_value(&self) -> &String;
+    fn identifier_key() -> String;
 }
