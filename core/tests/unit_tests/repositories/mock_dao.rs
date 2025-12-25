@@ -41,6 +41,7 @@ pub struct DaoBuilder {
     pub update_one: Result<String, String>,
     pub delete_one: Result<(), String>,
     pub delete_all: Result<(), String>,
+    pub count: Result<u64, String>,
 }
 
 impl Default for DaoBuilder {
@@ -52,6 +53,7 @@ impl Default for DaoBuilder {
             update_one: Ok("whatever".to_string()),
             delete_one: Ok(()),
             delete_all: Ok(()),
+            count: Ok(1)
         }
     }
 }
@@ -84,6 +86,10 @@ impl DAO<MockDataDbo, String, String> for MockDao {
 
     async fn delete_all(&self) -> Result<(), String> {
         self.dao_builder.delete_all.clone()
+    }
+
+    async fn count(&self) -> Result<u64, String> {
+        self.dao_builder.count.clone()
     }
 }
 

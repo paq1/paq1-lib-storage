@@ -13,4 +13,6 @@ pub trait DAO<DBO, ID, ERR>: Send + Sync {
     async fn delete(&self, id: &String) -> Result<(), ERR>;
     async fn delete_all(&self) -> Result<(), ERR>;
 
+    async fn count(&self) -> Result<u64, ERR>;
+
 }

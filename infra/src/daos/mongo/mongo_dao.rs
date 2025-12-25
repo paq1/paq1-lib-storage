@@ -9,6 +9,7 @@ use crate::daos::mongo::identifier::HasIdentifier;
 use crate::query::DocumentQuery;
 use core_lib::query::Query;
 use mongodb::bson::doc;
+use mongodb::options::FindOptions;
 
 pub struct MongoDao<DBO>
 where
@@ -23,9 +24,20 @@ where
 {
     async fn find_all(&self, query: &Query) -> Result<Vec<DBO>, mongodb::error::Error> {
         let document_wrapper: DocumentQuery = query.clone().into();
+        let page = query.pager.page_number as u64;
+        let page_size = query.pager.page_size as u64;
+
+        let skip_value = (page - 1) * page_size;
+
+        let find_options = FindOptions::builder()
+            .skip(Some(skip_value))
+            .limit(Some(page_size as i64))
+            .sort(doc! { "_id": 1})
+            .build();
+
         self.collection
-            .find(document_wrapper.filter)
-            .await?
+            .find(document_wrapper.filter.clone())
+            .with_options(Some(find_options)).await?
             .try_collect::<Vec<DBO>>()
             .await
     }
@@ -78,5 +90,9 @@ where
         self.collection
             .delete_many(doc! {})
             .await.map(|_| ())
+    }
+
+    async fn count(&self) -> Result<u64, mongodb::error::Error> {
+        self.collection.count_documents(doc ! {}).await
     }
 }

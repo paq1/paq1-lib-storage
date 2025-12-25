@@ -105,7 +105,7 @@ async fn should_fetch_all_empty_when_dao_fetch_empty_test() {
         })
         .await
         .unwrap();
-    assert!(maybe_data.is_empty());
+    assert!(maybe_data.data.is_empty());
 }
 
 #[tokio::test]
@@ -125,7 +125,7 @@ async fn should_fetch_all_items_when_dao_fetch_items_test() {
         dao: mock_dao.clone(),
     });
 
-    let datas = repository
+    let paged = repository
         .fetch_all(&Query {
             filter: Filter::None,
             pager: Pager::default(),
@@ -133,10 +133,12 @@ async fn should_fetch_all_items_when_dao_fetch_items_test() {
         .await
         .unwrap();
 
-    assert_eq!(datas.len(), 1);
+    let data = paged.data;
 
-    assert_eq!(datas[0].age, 18);
-    assert_eq!(datas[0].name, "item");
+    assert_eq!(data.len(), 1);
+
+    assert_eq!(data[0].age, 18);
+    assert_eq!(data[0].name, "item");
 }
 
 #[tokio::test]

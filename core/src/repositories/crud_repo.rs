@@ -4,9 +4,21 @@ use crate::repositories::repository::Repository;
 use paq1_lib_error_handler::prelude::{ErrorWithCodeBuilder, ResultErr};
 use std::sync::Arc;
 use async_trait::async_trait;
+use crate::data::paged::Paged;
 
 pub struct CrudRepository<DBO, DBOERR> {
     pub dao: Arc<dyn DAO<DBO, String, DBOERR>>
+}
+
+impl<DBO, ID> CrudRepository<DBO, ID> {
+    pub async fn count(&self) -> ResultErr<u64> {
+        self.dao
+            .count()
+            .await
+            .map_err(|_err| {
+                ErrorWithCodeBuilder::new("00MONCO", 500, "count error").build()
+            })
+    }
 }
 
 
@@ -25,9 +37,30 @@ where
             })
     }
 
-    async fn fetch_all(&self, query: &Query) -> ResultErr<Vec<DATA>> {
-        self.dao.fetch_all(query).await
-            .map(|datas| datas.into_iter().map(|data| data.into()).collect::<Vec<_>>())
+    async fn fetch_all(&self, query: &Query) -> ResultErr<Paged<DATA>> {
+        let total_records = self.count().await? as u32;
+        let page_size = query.pager.page_size;
+        let total_page = ((total_records as f64) / (page_size as f64)).ceil() as u32;
+
+        self.dao
+            .fetch_all(&query)
+            .await
+            .map(|dbo_opt| {
+                dbo_opt
+                    .into_iter()
+                    .map(|dbo| {
+                        let data = dbo.into();
+                        data
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .map(|data| Paged {
+                data,
+                total_page,
+                total_records,
+                offset: query.pager.page_number,
+                page_size,
+            })
             .map_err(|err| {
                 ErrorWithCodeBuilder::new("00MONFA", 500, err.to_string().as_str()).build()
             })

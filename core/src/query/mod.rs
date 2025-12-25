@@ -40,8 +40,8 @@ pub enum Operation {
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Pager {
-    pub page_number: usize,
-    pub page_size: usize,
+    pub page_number: u32,
+    pub page_size: u32,
 }
 impl Default for Pager {
     fn default() -> Self {
