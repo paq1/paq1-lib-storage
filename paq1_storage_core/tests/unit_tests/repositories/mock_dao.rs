@@ -58,7 +58,7 @@ impl Default for DaoBuilder {
     }
 }
 
-struct MockDao {
+pub struct MockDao {
     pub dao_builder: DaoBuilder
 }
 
@@ -94,7 +94,7 @@ impl DAO<MockDataDbo, String, String> for MockDao {
 }
 
 impl DaoBuilder {
-    pub(super) fn build(&self) -> impl DAO<MockDataDbo, String, String> {
+    pub fn build(&self) -> MockDao {
         MockDao {
             dao_builder: self.clone()
         }
