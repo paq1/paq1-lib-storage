@@ -74,7 +74,7 @@ async fn should_fetch_one_error_when_dao_fetch_error_test() {
 
     match maybe_ok {
         Ok(_) => panic!("Should have failed!"),
-        Err(Error::ErrorWithCode(e)) => {
+        Err(Error::Failure(e)) => {
             assert_eq!(e.title, String::from("error message from dao"));
             assert_eq!(e.code, String::from("00MONFO"));
             assert_eq!(e.status, 500);
@@ -166,7 +166,7 @@ async fn should_fetch_all_error_when_dao_fetch_error_test() {
 
     match maybe_ok {
         Ok(_) => panic!("Should have failed!"),
-        Err(Error::ErrorWithCode(e)) => {
+        Err(Error::Failure(e)) => {
             assert_eq!(e.title, String::from("error message from dao"));
             assert_eq!(e.code, String::from("00MONFA"));
             assert_eq!(e.status, 500);
@@ -226,7 +226,7 @@ async fn should_failed_insert_when_dao_insert_error_test() {
 
     match maybe_ok {
         Ok(_) => panic!("Should have failed!"),
-        Err(Error::ErrorWithCode(e)) => {
+        Err(Error::Failure(e)) => {
             assert_eq!(e.title, String::from("error message from dao"));
             assert_eq!(e.code, String::from("00MONIN"));
             assert_eq!(e.status, 500);
@@ -286,7 +286,7 @@ async fn should_failed_update_when_dao_update_error_test() {
 
     match maybe_ok {
         Ok(_) => panic!("Should have failed!"),
-        Err(Error::ErrorWithCode(e)) => {
+        Err(Error::Failure(e)) => {
             assert_eq!(e.title, String::from("error message from dao"));
             assert_eq!(e.code, String::from("00MONUP"));
             assert_eq!(e.status, 500);
@@ -335,7 +335,7 @@ async fn should_failed_delete_one_when_dao_delete_one_error_test() {
 
     match maybe_ok {
         Ok(_) => panic!("Should have failed!"),
-        Err(Error::ErrorWithCode(e)) => {
+        Err(Error::Failure(e)) => {
             assert_eq!(e.title, String::from("error message from dao"));
             assert_eq!(e.code, String::from("00MONDO"));
             assert_eq!(e.status, 500);
@@ -384,7 +384,7 @@ async fn should_failed_delete_all_when_dao_delete_all_error_test() {
 
     match maybe_ok {
         Ok(_) => panic!("Should have failed!"),
-        Err(Error::ErrorWithCode(e)) => {
+        Err(Error::Failure(e)) => {
             assert_eq!(e.title, String::from("error message from dao"));
             assert_eq!(e.code, String::from("00MONDA"));
             assert_eq!(e.status, 500);

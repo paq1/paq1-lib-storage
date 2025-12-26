@@ -1,7 +1,7 @@
 use crate::daos::DAO;
 use crate::prelude::Query;
 use crate::repositories::repository::Repository;
-use paq1_lib_error_handler::prelude::{ErrorWithCodeBuilder, ResultErr};
+use paq1_lib_error_handler::prelude::{Error, ErrorWithCode, ResultErr};
 use std::sync::Arc;
 use async_trait::async_trait;
 use crate::data::paged::Paged;
@@ -16,7 +16,7 @@ impl<DBO, ID> CrudRepository<DBO, ID> {
             .count()
             .await
             .map_err(|_err| {
-                ErrorWithCodeBuilder::new("00MONCO", 500, "count error").build()
+                Error::Failure(ErrorWithCode::new("00MONCO", 500, "count error"))
             })
     }
 }
@@ -33,7 +33,7 @@ where
         self.dao.fetch_one(id).await
             .map(|data| data.map(|d| d.into()))
             .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONFO", 500, err.to_string().as_str()).build()
+                Error::Failure(ErrorWithCode::new("00MONFO", 500, err.to_string().as_str()))
             })
     }
 
@@ -62,7 +62,7 @@ where
                 page_size,
             })
             .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONFA", 500, err.to_string().as_str()).build()
+                Error::Failure(ErrorWithCode::new("00MONFA", 500, err.to_string().as_str()))
             })
     }
 
@@ -70,7 +70,7 @@ where
         let dbo: DBO = entity.clone().into();
         self.dao.insert(&dbo).await
             .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONIN", 500, err.to_string().as_str()).build()
+                Error::Failure(ErrorWithCode::new("00MONIN", 500, err.to_string().as_str()))
             })
     }
 
@@ -78,21 +78,21 @@ where
         let dbo: DBO = entity.clone().into();
         self.dao.update(&dbo).await
             .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONUP", 500, err.to_string().as_str()).build()
+                Error::Failure(ErrorWithCode::new("00MONUP", 500, err.to_string().as_str()))
             })
     }
 
     async fn delete(&self, id: &String) -> ResultErr<()> {
         self.dao.delete(id).await
             .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONDO", 500, err.to_string().as_str()).build()
+                Error::Failure(ErrorWithCode::new("00MONDO", 500, err.to_string().as_str()))
             })
     }
 
     async fn delete_all(&self) -> ResultErr<()> {
         self.dao.delete_all().await
             .map_err(|err| {
-                ErrorWithCodeBuilder::new("00MONDA", 500, err.to_string().as_str()).build()
+                Error::Failure(ErrorWithCode::new("00MONDA", 500, err.to_string().as_str()))
             })
     }
 }

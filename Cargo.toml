@@ -7,4 +7,4 @@ tokio = { version = "1.43.0", features = ["full"] }
 async-trait = { version = "0.1.80" }
 config = { version = "0.15.8" }
 dotenv = { version = "0.15.0" }
-paq1-lib-error-handler = { git = "https://github.com/paq1/paq1-lib-error-handler.git", branch = "master", features = ["combine"] }
+paq1-lib-error-handler = { git = "https://github.com/paq1/paq1-lib-error-handler.git", branch = "master", features = ["combine"], version = "0.2.0" }
