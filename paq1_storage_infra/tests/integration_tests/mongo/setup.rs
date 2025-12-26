@@ -1,8 +1,8 @@
 use crate::integration_tests::mongo::dbo_model::PersonnageDBO;
 use crate::integration_tests::settings::Settings;
-use core_lib::daos::DAO;
-use infra::daos::mongo::database::DatabaseMongo;
-use infra::daos::mongo::mongo_dao::MongoDao;
+use paq1_storage_core::daos::DAO;
+use paq1_storage_infra::daos::mongo::database::DatabaseMongo;
+use paq1_storage_infra::daos::mongo::mongo_dao::MongoDao;
 use paq1_lib_error_handler::prelude::{ErrorWithCodeBuilder, Problem, ResultErr};
 use std::sync::Arc;
 

@@ -1,9 +1,9 @@
 use crate::unit_tests::repositories::mock_dao::{DaoBuilder, MockData, MockDataDbo};
-use core_lib::daos::DAO;
-use core_lib::prelude::crud_repo::CrudRepository;
-use core_lib::prelude::Filter;
-use core_lib::query::{Pager, Query};
-use core_lib::repositories::repository::Repository;
+use paq1_storage_core::daos::DAO;
+use paq1_storage_core::prelude::crud_repo::CrudRepository;
+use paq1_storage_core::prelude::Filter;
+use paq1_storage_core::query::{Pager, Query};
+use paq1_storage_core::repositories::repository::Repository;
 use paq1_lib_error_handler::prelude::Error;
 use std::sync::Arc;
 

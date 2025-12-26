@@ -1,4 +1,4 @@
-use infra::daos::mongo::identifier::HasIdentifier;
+use paq1_storage_infra::daos::mongo::identifier::HasIdentifier;
 use serde::{Deserialize, Serialize};
 
 

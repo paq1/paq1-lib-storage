@@ -1,5 +1,5 @@
-use core_lib::query::*;
-use infra::prelude::DocumentQuery;
+use paq1_storage_core::query::*;
+use paq1_storage_infra::prelude::DocumentQuery;
 use mongodb::bson::doc;
 
 #[test]

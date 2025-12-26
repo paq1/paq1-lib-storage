@@ -1,4 +1,4 @@
-use core_lib::prelude::*;
+use paq1_storage_core::prelude::*;
 use mongodb::bson::{doc, Document};
 
 pub struct DocumentQuery {

@@ -1,4 +1,4 @@
 /target
 .idea
-core/target
-infra/target
+paq1_storage_core/target
+paq1_storage_infra/target

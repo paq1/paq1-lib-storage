@@ -1,4 +1,4 @@
-use core_lib::prelude::{Filter, Pager, Query};
+use paq1_storage_core::prelude::{Filter, Pager, Query};
 
 pub mod repositories;
 

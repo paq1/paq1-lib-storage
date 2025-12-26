@@ -1,7 +1,7 @@
 use crate::integration_tests::mongo::dbo_model::PersonnageDBO;
 use crate::integration_tests::mongo::setup::{before_each, set_up_test_personnage_dao};
-use core_lib::prelude::Filter;
-use core_lib::query::{Pager, Query};
+use paq1_storage_core::prelude::Filter;
+use paq1_storage_core::query::{Pager, Query};
 
 #[tokio::test]
 pub async fn should_insert_read_update_delete_in_mongo_test() {

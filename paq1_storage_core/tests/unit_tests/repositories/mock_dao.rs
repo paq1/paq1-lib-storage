@@ -1,6 +1,6 @@
 use async_trait::async_trait;
-use core_lib::daos::DAO;
-use core_lib::prelude::Query;
+use paq1_storage_core::daos::DAO;
+use paq1_storage_core::prelude::Query;
 
 #[derive(Clone, Debug)]
 pub struct MockData {

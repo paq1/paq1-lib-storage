@@ -1,5 +1,5 @@
 use async_trait::async_trait;
-use core_lib::daos::DAO;
+use paq1_storage_core::daos::DAO;
 use futures::TryStreamExt;
 use mongodb::Collection;
 use serde::de::DeserializeOwned;
@@ -7,7 +7,7 @@ use serde::Serialize;
 
 use crate::daos::mongo::identifier::HasIdentifier;
 use crate::query::DocumentQuery;
-use core_lib::query::Query;
+use paq1_storage_core::query::Query;
 use mongodb::bson::doc;
 use mongodb::options::FindOptions;
 
