@@ -1,6 +1,6 @@
 [package]
 name = "paq1_storage_infra"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2024"
 
 [dependencies]
@@ -14,7 +14,6 @@ log = "0.4.22"
 futures = "0.3.30"
 env_logger = "0.11.5"
 serde = { version = "1.0.203", features = ["derive"] }
-# uuid = { version = "1.9.1", features = ["v4", "fast-rng"] }
 
 paq1_storage_core = { path = "../paq1_storage_core" }
 

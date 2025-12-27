@@ -4,7 +4,7 @@ use crate::data::paged::Paged;
 use crate::prelude::Query;
 
 #[async_trait]
-pub trait Repository<DATA, ID> {
+pub trait Repository<DATA, ID>: Send + Sync {
 
     async fn fetch_one(&self, id: &ID) -> ResultErr<Option<DATA>>;
     async fn fetch_all(&self, query: &Query) -> ResultErr<Paged<DATA>>;
