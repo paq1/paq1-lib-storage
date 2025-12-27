@@ -1,3 +1,4 @@
+use crate::data::quick_search::QuickSearchPath;
 use crate::query::Query;
 use async_trait::async_trait;
 
@@ -13,6 +14,8 @@ pub trait DAO<DBO, ID, ERR>: Send + Sync {
     async fn delete(&self, id: &String) -> Result<(), ERR>;
     async fn delete_all(&self) -> Result<(), ERR>;
 
+
+    async fn quick_search(&self, chaine: &str, paths: Vec<QuickSearchPath>) -> Result<Vec<DBO>, ERR>;
     async fn count(&self) -> Result<u64, ERR>;
 
 }

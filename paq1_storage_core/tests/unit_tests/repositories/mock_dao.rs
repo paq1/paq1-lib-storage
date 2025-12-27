@@ -1,5 +1,6 @@
 use async_trait::async_trait;
 use paq1_storage_core::daos::DAO;
+use paq1_storage_core::data::quick_search::QuickSearchPath;
 use paq1_storage_core::prelude::Query;
 
 #[derive(Clone, Debug)]
@@ -41,6 +42,7 @@ pub struct DaoBuilder {
     pub update_one: Result<String, String>,
     pub delete_one: Result<(), String>,
     pub delete_all: Result<(), String>,
+    pub quick_search: Result<Vec<MockDataDbo>, String>,
     pub count: Result<u64, String>,
 }
 
@@ -53,6 +55,7 @@ impl Default for DaoBuilder {
             update_one: Ok("whatever".to_string()),
             delete_one: Ok(()),
             delete_all: Ok(()),
+            quick_search: Ok(vec![]),
             count: Ok(1)
         }
     }
@@ -86,6 +89,10 @@ impl DAO<MockDataDbo, String, String> for MockDao {
 
     async fn delete_all(&self) -> Result<(), String> {
         self.dao_builder.delete_all.clone()
+    }
+
+    async fn quick_search(&self, _chaine: &str, _paths: Vec<QuickSearchPath>) -> Result<Vec<MockDataDbo>, String> {
+        self.dao_builder.quick_search.clone()
     }
 
     async fn count(&self) -> Result<u64, String> {

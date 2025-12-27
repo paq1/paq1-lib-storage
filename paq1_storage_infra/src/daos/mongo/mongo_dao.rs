@@ -9,7 +9,9 @@ use crate::daos::mongo::identifier::HasIdentifier;
 use crate::query::DocumentQuery;
 use paq1_storage_core::query::Query;
 use mongodb::bson::doc;
+use mongodb::error::Error;
 use mongodb::options::FindOptions;
+use paq1_storage_core::data::quick_search::QuickSearchPath;
 
 pub struct MongoDao<DBO>
 where
@@ -90,6 +92,35 @@ where
         self.collection
             .delete_many(doc! {})
             .await.map(|_| ())
+    }
+
+    async fn quick_search(&self, chaine: &str, paths: Vec<QuickSearchPath>) -> Result<Vec<DBO>, Error> {
+        let find_options = FindOptions::builder()
+            // .skip(Some(skip_value))
+            // .limit(Some(10 as i64))
+            .sort(doc! { "_id": 1})
+            .build();
+
+        let list = paths
+            .into_iter()
+            .map(|path| {
+                doc! {
+                    path.field_path.as_str(): doc! {
+                        "$regex": chaine,
+                        "$options": "i"
+                    },
+                }
+            }).collect::<Vec<_>>();
+
+        let query = doc! {
+            "$or": list
+        };
+
+        self.collection
+            .find(query)
+            .with_options(Some(find_options)).await?
+            .try_collect::<Vec<DBO>>()
+            .await
     }
 
     async fn count(&self) -> Result<u64, mongodb::error::Error> {
