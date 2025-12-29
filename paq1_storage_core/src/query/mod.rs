@@ -24,6 +24,16 @@ pub enum Filter {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expression {
     ExpressionString(ExpressionT<String>),
+    ExpressionNumberInt(ExpressionT<i64>)
+}
+
+impl Expression {
+    pub fn get_operator(&self) -> &Operation {
+        match self {
+            Expression::ExpressionString(e) => &e.operation,
+            Expression::ExpressionNumberInt(e) => &e.operation
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -36,6 +46,8 @@ pub struct ExpressionT<T> {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Operation {
     EqualsTo,
+    GreaterThan,
+    LessThan,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

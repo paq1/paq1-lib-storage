@@ -26,7 +26,8 @@ where
 {
     async fn find_all(&self, query: &Query) -> Result<Vec<DBO>, mongodb::error::Error> {
         let document_wrapper: DocumentQuery = query.clone().into();
-        let page = query.pager.page_number as u64;
+        let page_unsafe = query.pager.page_number as u64;
+        let page = if page_unsafe == 0 { 1 } else { page_unsafe };
         let page_size = query.pager.page_size as u64;
 
         let skip_value = (page - 1) * page_size;

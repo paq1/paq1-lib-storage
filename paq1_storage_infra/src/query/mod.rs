@@ -1,5 +1,5 @@
-use paq1_storage_core::prelude::*;
 use mongodb::bson::{doc, Document};
+use paq1_storage_core::prelude::*;
 
 pub struct DocumentQuery {
     pub filter: Document,
@@ -29,12 +29,34 @@ impl From<Query> for DocumentQuery {
 
 fn query_to_filter(query: &Query) -> Document {
     match query.get_filter() {
-        Filter::Expression(e) => match e {
-            Expression::ExpressionString(x) =>
-                doc! { x.field_name.as_str() : x.head.as_str() },
+        Filter::Expression(e) => {
+            let operator = e.get_operator();
+            let operator_mongo = from_operation_to_mongo_operator(operator);
+            match e {
+                Expression::ExpressionString(x) => {
+                    doc! { x.field_name.as_str() : { operator_mongo: x.head.as_str() } }
+                }
+                Expression::ExpressionNumberInt(x) => {
+                    doc! { x.field_name.as_str() : { operator_mongo: x.head } }
+                }
+            }
         },
         Filter::None => doc! {},
     }
+}
+
+fn from_operation_to_mongo_operator(operation: &Operation) -> &str {
+    let default = "$eq";
+
+    vec![
+        (Operation::EqualsTo, "$eq"),
+        (Operation::GreaterThan, "$gt"),
+        (Operation::LessThan, "$lt"),
+    ]
+        .into_iter()
+        .find(|(op, _)| op == operation)
+        .map(|(_, mongo_operator)| mongo_operator)
+        .unwrap_or(default)
 }
 
 fn query_to_sorter(_query: &Query) -> Document {

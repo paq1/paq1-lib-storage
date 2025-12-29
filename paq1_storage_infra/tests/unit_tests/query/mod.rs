@@ -34,7 +34,7 @@ pub fn should_map_query_filter_equal_to_filter_equal_document_test() {
     let document_wrapper: DocumentQuery = query.into();
 
     assert_eq!(document_wrapper.filter, doc! {
-        "field_test": "value test"
+        "field_test": { "$eq": "value test" }
     });
 }
 

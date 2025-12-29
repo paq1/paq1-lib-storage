@@ -1271,7 +1271,7 @@ source = "git+https://github.com/paq1/paq1-lib-error-handler.git?branch=master#1
 
 [[package]]
 name = "paq1_storage_core"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "async-trait",
  "paq1-lib-error-handler",
@@ -1280,7 +1280,7 @@ dependencies = [
 
 [[package]]
 name = "paq1_storage_infra"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "async-trait",
  "config",
